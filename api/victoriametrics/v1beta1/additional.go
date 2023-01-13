@@ -7,7 +7,7 @@ import (
 
 	appsv1 "k8s.io/api/apps/v1"
 
-	"k8s.io/api/autoscaling/v2beta2"
+	"k8s.io/api/autoscaling/v2"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
 	v1 "k8s.io/api/core/v1"
@@ -327,12 +327,12 @@ type EmbeddedProbes struct {
 }
 
 // EmbeddedHPA embeds HorizontalPodAutoScaler spec v2.
-// https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/horizontal-pod-autoscaler-v2beta2/
+// https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/horizontal-pod-autoscaler-v2/
 type EmbeddedHPA struct {
-	MinReplicas *int32                                   `json:"minReplicas,omitempty"`
-	MaxReplicas int32                                    `json:"maxReplicas,omitempty"`
-	Metrics     []v2beta2.MetricSpec                     `json:"metrics,omitempty"`
-	Behaviour   *v2beta2.HorizontalPodAutoscalerBehavior `json:"behaviour,omitempty"`
+	MinReplicas *int32                              `json:"minReplicas,omitempty"`
+	MaxReplicas int32                               `json:"maxReplicas,omitempty"`
+	Metrics     []v2.MetricSpec                     `json:"metrics,omitempty"`
+	Behaviour   *v2.HorizontalPodAutoscalerBehavior `json:"behaviour,omitempty"`
 }
 
 func (cr *EmbeddedHPA) sanityCheck() error {

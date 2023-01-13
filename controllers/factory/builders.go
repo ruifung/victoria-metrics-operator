@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/VictoriaMetrics/operator/controllers/factory/k8stools"
-	"k8s.io/api/autoscaling/v2beta2"
+	"k8s.io/api/autoscaling/v2"
 	policyv1 "k8s.io/api/policy/v1"
 	policyv1beta1 "k8s.io/api/policy/v1beta1"
 	"strings"
@@ -402,15 +402,15 @@ func buildProbe(container v1.Container, cr probeCRD) v1.Container {
 	return container
 }
 
-func buildHPASpec(targetRef v2beta2.CrossVersionObjectReference, spec *victoriametricsv1beta1.EmbeddedHPA, or []metav1.OwnerReference, lbls map[string]string, namespace string) *v2beta2.HorizontalPodAutoscaler {
-	return &v2beta2.HorizontalPodAutoscaler{
+func buildHPASpec(targetRef v2.CrossVersionObjectReference, spec *victoriametricsv1beta1.EmbeddedHPA, or []metav1.OwnerReference, lbls map[string]string, namespace string) *v2.HorizontalPodAutoscaler {
+	return &v2.HorizontalPodAutoscaler{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:            targetRef.Name,
 			Namespace:       namespace,
 			Labels:          lbls,
 			OwnerReferences: or,
 		},
-		Spec: v2beta2.HorizontalPodAutoscalerSpec{
+		Spec: v2.HorizontalPodAutoscalerSpec{
 			MaxReplicas:    spec.MaxReplicas,
 			MinReplicas:    spec.MinReplicas,
 			ScaleTargetRef: targetRef,
@@ -420,8 +420,8 @@ func buildHPASpec(targetRef v2beta2.CrossVersionObjectReference, spec *victoriam
 	}
 }
 
-func reconcileHPA(ctx context.Context, rclient client.Client, targetHPA *v2beta2.HorizontalPodAutoscaler) error {
-	var existHPA v2beta2.HorizontalPodAutoscaler
+func reconcileHPA(ctx context.Context, rclient client.Client, targetHPA *v2.HorizontalPodAutoscaler) error {
+	var existHPA v2.HorizontalPodAutoscaler
 	if err := rclient.Get(ctx, types.NamespacedName{Name: targetHPA.Name, Namespace: targetHPA.Namespace}, &existHPA); err != nil {
 		if errors.IsNotFound(err) {
 			log.Info("creating new HPA for vminsert")

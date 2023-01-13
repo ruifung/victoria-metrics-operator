@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/VictoriaMetrics/operator/controllers/factory/finalize"
-	"k8s.io/api/autoscaling/v2beta2"
+	"k8s.io/api/autoscaling/v2"
 	policyv1 "k8s.io/api/policy/v1"
 	"k8s.io/apimachinery/pkg/util/wait"
 	"path"
@@ -1353,7 +1353,7 @@ func createOrUpdateVMInsertHPA(ctx context.Context, rclient client.Client, clust
 		}
 		return nil
 	}
-	targetRef := v2beta2.CrossVersionObjectReference{
+	targetRef := v2.CrossVersionObjectReference{
 		Name:       cluster.Spec.VMInsert.GetNameWithPrefix(cluster.Name),
 		Kind:       "Deployment",
 		APIVersion: "apps/v1",
@@ -1369,7 +1369,7 @@ func createOrUpdateVMSelectHPA(ctx context.Context, rclient client.Client, clust
 		}
 		return nil
 	}
-	targetRef := v2beta2.CrossVersionObjectReference{
+	targetRef := v2.CrossVersionObjectReference{
 		Name:       cluster.Spec.VMSelect.GetNameWithPrefix(cluster.Name),
 		Kind:       "StatefulSet",
 		APIVersion: "apps/v1",

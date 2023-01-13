@@ -5,7 +5,7 @@ import (
 
 	victoriametricsv1beta1 "github.com/VictoriaMetrics/operator/api/v1beta1"
 	appsv1 "k8s.io/api/apps/v1"
-	"k8s.io/api/autoscaling/v2beta2"
+	"k8s.io/api/autoscaling/v2"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
@@ -14,7 +14,7 @@ import (
 
 // HPADelete handles case, when user wants to remove HPA configuration from cluster config.
 func HPADelete(ctx context.Context, rclient client.Client, objectName, objectNamespace string) error {
-	hpa := &v2beta2.HorizontalPodAutoscaler{
+	hpa := &v2.HorizontalPodAutoscaler{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      objectName,
 			Namespace: objectNamespace,
@@ -45,7 +45,7 @@ func OnVMClusterDelete(ctx context.Context, rclient client.Client, crd *victoria
 				return err
 			}
 		}
-		if err := removeFinalizeObjByName(ctx, rclient, &v2beta2.HorizontalPodAutoscaler{}, obj.GetNameWithPrefix(crd.Name), crd.Namespace); err != nil {
+		if err := removeFinalizeObjByName(ctx, rclient, &v2.HorizontalPodAutoscaler{}, obj.GetNameWithPrefix(crd.Name), crd.Namespace); err != nil {
 			return err
 		}
 
@@ -70,7 +70,7 @@ func OnVMClusterDelete(ctx context.Context, rclient client.Client, crd *victoria
 			return err
 		}
 
-		if err := removeFinalizeObjByName(ctx, rclient, &v2beta2.HorizontalPodAutoscaler{}, obj.GetNameWithPrefix(crd.Name), crd.Namespace); err != nil {
+		if err := removeFinalizeObjByName(ctx, rclient, &v2.HorizontalPodAutoscaler{}, obj.GetNameWithPrefix(crd.Name), crd.Namespace); err != nil {
 			return err
 		}
 
